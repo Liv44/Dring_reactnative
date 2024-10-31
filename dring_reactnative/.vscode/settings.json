@@ -1,0 +1,5 @@
+{
+    "powermode.combo.location": "statusbar",
+    "powermode.enabled": true,
+    "powermode.presets": "flames"
+}
