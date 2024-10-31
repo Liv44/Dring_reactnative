@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { useHistoryContext } from "../../context/HistoryContext";
 
 const HistoySessionsComponent = () => {
-    const {history: history} = useHistoryContext();
+    const { history } = useHistoryContext();
     const [openedSessions, setOpenedSessions] = useState<number[]>([0]);
 
     return history.sessions.sort((a: Session, b: Session) => {

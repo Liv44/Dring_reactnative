@@ -35,7 +35,6 @@ const Pomodoro = () => {
       // Check if a session is already created for the current date
       const sessionIndex = history.sessions.findIndex(session => session.date === date);
 
-      // console.log({history, sessions: history.sessions, sessionIndex, sessionDate : history.sessions[0].date, date});
       if(sessionIndex === -1) {
         setHistory((history: History) => {
           const newHistory = new History(
@@ -49,13 +48,11 @@ const Pomodoro = () => {
         setActiveSessionIndex(history.sessions.length - 1);
       } else {
         setSession(history.sessions[sessionIndex]);
-        // console.log({session: history.sessions[sessionIndex]});
         setActiveSessionIndex(sessionIndex);
       }
     }
 
     getDate();
-    console.log({date});
 
   }, [date]);
  
@@ -79,14 +76,17 @@ const Pomodoro = () => {
 
     if(remainingTime == 0 && isRunning) {
       timerMode === 'Focus' ? goToBreakTime() : goToNextPomodori();
-      session?.addPomodoro();
+      // Add session completed to history
+      if(timerMode === 'Focus') {
+        session.addPomodori();
+      }
       saveHistory();
       Notifications.sendEndSessionNotification({counterOfPomodoris, timerMode})
     }
 
-    if(isRunning && session && timerMode === 'Focus') {
+    if(isRunning && session && timerMode === 'Focus' && remainingTime !== pomodoroSettings.focusTime) {
       session?.addTimeToTotal(1000);
-      history.updateSession(session, activeSessionIndex);
+      history.updateSession(session, date);
       saveHistory();
     }
 
@@ -136,8 +136,7 @@ const Pomodoro = () => {
       setCounterOfPomodoris((prev) => prev + 1);
     }
     
-    session.addPomodori();
-    history.updateSession(session, activeSessionIndex);
+    history.updateSession(session, date);
     await history.saveInStorage();
     
     setTimerMode('Focus');
@@ -148,27 +147,14 @@ const Pomodoro = () => {
     setTimerMode('Break');
     if(counterOfPomodoris === NUMBER_OF_POMODORIS && pomodoroSettings.longBreakTime) {
       setRemainingTime(pomodoroSettings.longBreakTime);
-      session.addPomodoro();
-      history.updateSession(session, activeSessionIndex);
+
+      history.updateSession(session, date);
       await history.saveInStorage();
     } else {
+      history.updateSession(session, date);
+      await history.saveInStorage();
       setRemainingTime(pomodoroSettings.breakTime);
     }
-  }
-
-  const saveHistory = (history: History) => {
-    return new History(
-      history.name,
-      [...history.sessions]
-    )
-  }
-
-  const addSession = () => {
-    const session = history.sessions[0];
-    session.addSession();
-    session.addTimeToTotal(pomodoroSettings.focusTime);
-    session.addPomodoro();
-    setHistory(saveHistory);
   }
 
   return (

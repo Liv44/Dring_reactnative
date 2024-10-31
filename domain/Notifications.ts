@@ -32,7 +32,7 @@ export class NotificationService {
     private async registerForPushNotificationsAsync() {
         let token;
         if (this._platformOs === 'android') {
-            await setNotificationChannelAsync('default', {
+            await setNotificationChannelAsync('high_priority', {
                 name: 'default',
                 importance: AndroidImportance.MAX,
                 vibrationPattern: [0, 250, 250, 250],

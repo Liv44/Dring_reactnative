@@ -19,8 +19,8 @@ export class History {
         this.lastUpdate = new Date();
     }
 
-    updateSession(session: Session, index: number) {
-        console.log("update session", { session, index });
+    updateSession(session: Session, date: string) {
+        const index = this.sessions.findIndex((session) => session.date === date);
         this.sessions[index] = session;
         this.lastUpdate = new Date();
     }
