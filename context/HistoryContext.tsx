@@ -17,16 +17,18 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
     useEffect(()=> {
         const getHistory = async () => {
             try {
-                await AsyncStorage.clear();
-                await AsyncStorage.setItem('history', JSON.stringify(
-                    new History("Olivia", [
-                        new Session("2024-10-23", 3, 54000, 0),
-                        new Session("2024-10-24", 4, 68000, 1),
-                        new Session("2024-10-25", 1, 9000, 0),
-                        new Session("2024-10-26", 1, 35000, 0),
-                        new Session("2024-10-27", 8, 52381000, 2),
-                    ])
-                ));
+
+                // decomment to reset the history with data
+                // await AsyncStorage.clear();
+                // await AsyncStorage.setItem('history', JSON.stringify(
+                //     new History("Olivia", [
+                //         new Session("2024-10-23", 3, 54000, 0),
+                //         new Session("2024-10-24", 4, 68000, 1),
+                //         new Session("2024-10-25", 1, 9000, 0),
+                //         new Session("2024-10-26", 1, 35000, 0),
+                //         new Session("2024-10-27", 8, 52381000, 2),
+                //     ])
+                // ));
                 const history : History = StorageToDomain(await AsyncStorage.getItem('history'));
                 if(history) {
                     setHistory(history);
